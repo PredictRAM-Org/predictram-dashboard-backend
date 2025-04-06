@@ -22,6 +22,7 @@ const investorSchema = new Mongoose.Schema(
     profileCompleted: { type: "Boolean", default: false },
     estimatedInvestment: { type: Number, required: true, default: 0 },
     referedby: { type: Mongoose.Schema.ObjectId, ref: "Investors" },
+    model_credit: { type: Number, default: 0 },
     payments: {
       orderId: String,
       premiumUser: { type: Boolean, default: false },
