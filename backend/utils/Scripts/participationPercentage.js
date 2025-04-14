@@ -64,7 +64,7 @@ const getUsers = async (fromDate, toDate) => {
 const saveInFile = (data) => {
   try {
     var xls = json2xls(data);
-    fs.writeFileSync("01_Oct_2024(createdAt).xlsx", xls, "binary");
+    fs.writeFileSync("14_Mar_2025(createdAt).xlsx", xls, "binary");
     console.log("complete...");
   } catch (err) {
     console.error(err);
@@ -221,9 +221,9 @@ app.listen(8081, () => {
   console.log("Server started on port 8080.");
   //getEmailFromJsonAndFindUser();
   getPerticipationPercent(
-    new Date("2024-10-01"),
-    new Date("2024-11-30"),
-    new Date("2024-10-01")
+    new Date("2025-01-01"),
+    new Date("2025-03-15"),
+    new Date("2025-01-01")
   );
   // resetParticipationForNovemberUsers(2024);
 });
