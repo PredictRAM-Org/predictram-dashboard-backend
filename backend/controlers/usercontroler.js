@@ -55,10 +55,10 @@ module.exports = {
         name: Joi.string().min(5).required(),
         email: Joi.string().email().required(),
         password: Joi.string().min(8).max(64).required(),
-        phone: Joi.string().required(),
+        phone: Joi.string(),
         otp: Joi.string().min(6).max(6).required(),
         refercode: Joi.string().allow("").optional(),
-        phnotp: Joi.string().required(),
+        phnotp: Joi.string(),
         secret_token: Joi.string().required(),
         role: Joi.string().required(),
       };
@@ -68,9 +68,13 @@ module.exports = {
         return res.status(400).send(result.error.details[0].message);
       const emailuser = await Users.findOne({ userid: req.body.email });
       if (emailuser) return res.apiResponse(false, "Email Already Registerd.");
-      const phnuser = await Users.findOne({ phone: req.body.phone });
-      if (phnuser)
-        return res.apiResponse(false, "Phone Number Already Registerd.");
+      // const phnuser = await Users.findOne({ phone: req.body.phone });
+      // if (phnuser)
+      //   return res.apiResponse(false, "Phone Number Already Registerd.");
+      if (req.body.phone) {
+        const phnuser = await Users.findOne({ phone: req.body.phone });
+        if (phnuser) return res.apiResponse(false, "Phone Number Already Registered.");
+      }
       const otp = await Otp.findOne({ email: req.body.email });
       if (!otp || otp.otp != req.body.otp)
         return res.status(400).send("Invalid Email Otp");
