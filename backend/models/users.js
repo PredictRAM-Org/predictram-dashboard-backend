@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
     userid: String,
     email: { type: String },
     secret_token: { type: String },
-    phone: { type: String, required: true },
+    phone: { type: String },
     image: String,
     password: String,
     admin: {
