@@ -21,7 +21,7 @@ class FyersService {
 
   fyersAuthUrl() {
     const state = "sample_state";
-    const url = `https://api.fyers.in/api/v2/generate-authcode?client_id=${this.fyersAppId}&redirect_uri=${this.redirect_uri}&response_type=code&state=${state}`;
+    const url = `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${this.fyersAppId}&redirect_uri=${this.redirect_uri}&response_type=code&state=sample_state&nonce=sample_nonce`;
     console.log(url);
     return url;
   }
@@ -42,7 +42,7 @@ class FyersService {
 
     try {
       const { data } = await axios.post(
-        "https://api.fyers.in/api/v2/validate-refresh-token",
+        "https://api-t1.fyers.in/api/v3/validate-refresh-token",
         reqBody
       );
       if (data?.code === 200) {
