@@ -11,6 +11,8 @@ const ModelCreditTransactionSchema = new Mongoose.Schema(
       required: true,
     },
     amount: { type: Number, required: true },
+    orderId: { type: String },
+    paymentId: { type: String },
   },
   {
     timestamps: true,

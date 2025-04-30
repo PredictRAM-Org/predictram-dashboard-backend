@@ -66,6 +66,8 @@ const {
   confirmPaymentUsingToken,
   giveFreePremiumMembership,
   cancelFreePremiumMembership,
+  createPaymentOrder,
+  confirmModelCreditPayment,
 } = require("../controlers/paymentcontroler");
 const {
   getprofile,
@@ -202,7 +204,10 @@ const {
 } = require("../controlers/portfolioLeaderBoard.controller");
 const { createBondQnA } = require("../controlers/bondQnAControler");
 const StrategyController = require("../controlers/strategy.controller");
-const { getEconomicEventStock, getEconomicEventUpcomingRate } = require("../controlers/economicEventController");
+const {
+  getEconomicEventStock,
+  getEconomicEventUpcomingRate,
+} = require("../controlers/economicEventController");
 
 router.post("/register", register);
 router.post("/forgetpassword", forgetpassword);
@@ -326,6 +331,8 @@ router.put(
   usermiddleware,
   cancelFreePremiumMembership
 );
+router.post("/create-payment-order", createPaymentOrder);
+router.post("/model-payment-confirm", confirmModelCreditPayment);
 
 // professional user
 router.post("/professionalUser", usermiddleware, postProfessional);

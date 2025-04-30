@@ -1,6 +1,7 @@
 const Mongoose = require("mongoose");
 const razorpay = require("razorpay");
 const Investors = require("../models/investorsAccount");
+const ModelCreditTransaction = require("../models/modelCreditTransaction");
 
 const Razorpay = new razorpay({
   key_id: process.env.KEY_ID,
@@ -16,16 +17,17 @@ module.exports = {
         uniqueId: 1,
         firstName: 1,
         lastName: 1,
-        'payments.premiumUser': 1,
-        'payments.triedFreePremium': 1
+        "payments.premiumUser": 1,
+        "payments.triedFreePremium": 1,
       });
 
-      const modifiedDetails = paymentDetails.map(user => ({
-        uniqueId: user.uniqueId ? user.uniqueId : 'Not Available',
-        firstName: user.firstName ? user.firstName : 'Not Available',
-        lastName: user.lastName ? user.lastName : 'Not Available',
-        premiumUser: user.payments.premiumUser === false ? 'False' : 'True',
-        triedFreePremium: user.payments.triedFreePremium === false ? 'False' : 'True'
+      const modifiedDetails = paymentDetails.map((user) => ({
+        uniqueId: user.uniqueId ? user.uniqueId : "Not Available",
+        firstName: user.firstName ? user.firstName : "Not Available",
+        lastName: user.lastName ? user.lastName : "Not Available",
+        premiumUser: user.payments.premiumUser === false ? "False" : "True",
+        triedFreePremium:
+          user.payments.triedFreePremium === false ? "False" : "True",
       }));
 
       res.apiResponse(true, "Payment details", modifiedDetails);
@@ -127,5 +129,58 @@ module.exports = {
         })
       )
       .catch((err) => res.status(400).send({ success: false, message: err }));
+  },
+
+  createPaymentOrder: async (req, res) => {
+    const payment_capture = 1;
+    const amount = req.body.amount * 100;
+    const currency = "INR";
+
+    const option = {
+      amount,
+      currency,
+      receipt: req.body.userId,
+      payment_capture,
+    };
+
+    try {
+      const order = await Razorpay.orders.create(option);
+
+      const razorpayOrder = {
+        id: order.id,
+        currency: order.currency,
+        amount: order.amount,
+      };
+
+      res.send(razorpayOrder);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  confirmModelCreditPayment: async (req, res) => {
+    try {
+      const { userId, paymentId, orderId } = req.body;
+      const paymentDetails = await Razorpay.payments.fetch(paymentId);
+      console.log(paymentDetails);
+      await Investors.findByIdAndUpdate(userId, {
+        $inc: { model_credit: paymentDetails.amount / 100 },
+      });
+      await ModelCreditTransaction.create({
+        user: userId,
+        modelName: "ALL",
+        description: "Model Credit via Razorpay",
+        type: "CREDIT",
+        amount: paymentDetails.amount / 100,
+        orderId: orderId,
+        paymentId: paymentId,
+      });
+      res.status(200).send({
+        success: true,
+        message: "Model credit added successfully",
+      });
+    } catch (err) {
+      res.status(500).send({ success: false, message: err.message });
+    }
   },
 };
