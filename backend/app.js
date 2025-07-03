@@ -10,6 +10,8 @@ const routes = require("./routes/index");
 const path = require("path");
 const ApiResponse = require("./middlewares/ApiResponse");
 
+mongoose.set("strictQuery", true);
+
 mongoose
   .connect(
     "mongodb+srv://admin:admin@cluster0.wdfuc.mongodb.net/interns?retryWrites=true&w=majority",

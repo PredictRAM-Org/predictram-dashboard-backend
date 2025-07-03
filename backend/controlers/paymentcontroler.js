@@ -19,15 +19,20 @@ module.exports = {
         lastName: 1,
         "payments.premiumUser": 1,
         "payments.triedFreePremium": 1,
+        kycCompleted: 1,
+        pan: 1,
       });
 
       const modifiedDetails = paymentDetails.map((user) => ({
+        id: user._id,
         uniqueId: user.uniqueId ? user.uniqueId : "Not Available",
         firstName: user.firstName ? user.firstName : "Not Available",
         lastName: user.lastName ? user.lastName : "Not Available",
         premiumUser: user.payments.premiumUser === false ? "False" : "True",
         triedFreePremium:
           user.payments.triedFreePremium === false ? "False" : "True",
+        kycCompleted: user.kycCompleted === false ? "No" : "Yes",
+        pan: user.pan ? user.pan : "Not Available",
       }));
 
       res.apiResponse(true, "Payment details", modifiedDetails);

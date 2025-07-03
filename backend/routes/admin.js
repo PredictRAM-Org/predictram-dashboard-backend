@@ -81,10 +81,14 @@ const {
 } = require("../controlers/eventStocksInfoController");
 const { getBondQnA } = require("../controlers/bondQnAControler");
 const { getPaymentDetails } = require("../controlers/paymentcontroler");
+const {
+  updateDetails,
+} = require("../controlers/investor-controllers/investorRegister");
 
 router.get("/getusers", getusers);
 router.get("/get/registered/users", getRegisteredUsers);
 router.get("/get/registered/investors", getRegisteredInvestors);
+router.put("/update/registered/investors", updateDetails);
 router.put("/researchpaper/featured/create", makePaperFeatured);
 // router.post("/deploycontract", deploycontract);
 router.post("/createevent", upload.single("image"), createEvent);
