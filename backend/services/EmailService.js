@@ -14,11 +14,24 @@ class EmailService {
 
   async sendOTP(sendingTo, otp) {
     try {
+      // const mailOptions = {
+      //   from: '"PredictRam" <predictram.noreply.otp@gmail.com>',
+      //   to: sendingTo,
+      //   subject: "PredictRam OTP",
+      //   html: `<p>Your otp is ${otp}. It is valid for 5 min. Do not share otp with anyone.</p>`
+      // };
+
       const mailOptions = {
         from: '"PredictRam" <predictram.noreply.otp@gmail.com>',
         to: sendingTo,
-        subject: "PredictRam OTP",
-        html: `<p>Your otp is ${otp}. It is valid for 5 min. Do not share otp with anyone.</p>`
+        subject: "Your PredictRam Verification Code",
+        text: `Your PredictRam verification code is: ${otp}. It is valid for 5 minutes.`,
+        html: `<p>Your PredictRam verification code is: <b>${otp}</b>. It is valid for 5 minutes.</p>`,
+        replyTo: "support@predictram.com",
+        headers: {
+          "X-Priority": "3",
+          "X-Mailer": "PredictRam Mailer"
+        }
       };
 
       const info = await this.transporter.sendMail(mailOptions);

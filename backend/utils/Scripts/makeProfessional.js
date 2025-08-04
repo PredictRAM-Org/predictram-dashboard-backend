@@ -17,13 +17,24 @@ mongoose.connect(
 async function updateUsers() {
   try {
     const userEmails = [
-      "samruddhiKamble6604@gmail.com",
-      "ambargupta281121@gmail.com",
-      "khanagwal.varnika@gmail.com",
-      "venkatds234@gmail.com",
-      "sandeep_ec109@yahoo.co.in",
-      "jeeteshchawda@gmail.com",
+      "ronbhuyan168@gmail.com"
     ]
+
+    // First find all users with these emails
+    const existingUsers = await User.find({
+      email: { $in: userEmails }
+    });
+
+    // Get the emails that were found
+    const foundEmails = existingUsers.map(user => user.email);
+
+    // Find which emails were not found
+    const notFoundEmails = userEmails.filter(email => !foundEmails.includes(email));
+
+    if (notFoundEmails.length > 0) {
+      console.log('The following emails were not found in the database:');
+      notFoundEmails.forEach(email => console.log(email));
+    }
 
     // Update documents where email is in userEmails array
     // const result = await User.updateMany(
@@ -42,7 +53,7 @@ async function updateUsers() {
     // );
 
     const result = await User.updateMany(
-      { email: { $in: userEmails } },
+      { email: { $in: foundEmails } },
       {
         $set: {
           role: "USER",
@@ -50,7 +61,7 @@ async function updateUsers() {
           payments: {
             premiumUser: true,
             triedFreePremium: true,
-            expiry: new Date("2025-05-17T18:29:59.777+00:00")
+            expiry: new Date("2025-09-07T18:29:59.777+00:00")
           }
         }
       }
